@@ -80,7 +80,7 @@ class Shoes
     def move2 x, y
       remove if @real
       @left, @top, @width, @height = parent.left, parent.top, parent.width, parent.height
-      bg = @app.background(@pattern, left: @left, top: @top, width: @width, height: @height, curve: @curve, create_real: true, nocontrol: true)
+      bg = @app.background(@pattern, :left => @left, :top => @top, :width => @width, :height => @height, :curve => @curve, :create_real => true, :nocontrol => true)
       @real = bg.real
       @width, @height = 0, 0
     end
@@ -99,7 +99,7 @@ class Shoes
   class Para < Basic
     def text= s
       clear
-      @real = @app.para(s, left: left, top: top, nocontrol: true).real
+      @real = @app.para(s, :left => left, :top => top, :nocontrol => true).real
     end
   end
 
