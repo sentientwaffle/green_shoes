@@ -5,7 +5,7 @@ class Shoes
       @real.signal_connect "clicked", &blk
     end
     def focus
-      
+      @real.grab_focus
     end
   end
   

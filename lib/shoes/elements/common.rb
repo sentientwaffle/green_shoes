@@ -42,59 +42,6 @@ class Shoes
     
     def style(opts = nil)
       return @styles if styles == nil
-      #:align
-      #:angle
-      #:attach
-      #:autoplay
-      #:bottom
-      #:cap
-      #:center
-      #:change
-      #:checked
-      #:click
-      #:curve
-      #:displace_left
-      #:displace_top
-      #:emphasis
-      #:family
-      #:fill
-      #:font
-      #:group
-      #:height
-      #:hidden
-      #:inner
-      #:items
-      #:justify
-      #:kerning
-      #:leading
-      #:left
-      #:margin
-      #:margin_bottom
-      #:margin_left
-      #:margin_right
-      #:margin_top
-      #:outer
-      #:points
-      #:radius
-      #:right
-      #:rise
-      #:scroll
-      #:secret
-      #:size
-      #:state
-      #:stretch
-      #:strikecolor
-      #:strikethrough
-      #:stroke
-      #:strokewidth
-      #:text
-      #:top
-      #:undercolor
-      #:underline
-      #:variant
-      #:weight
-      #:width
-      #:wrap
       b.set_size_request opts[:width] || @width, opts[:height] || @height
     end
     

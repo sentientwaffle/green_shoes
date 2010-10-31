@@ -115,5 +115,6 @@ class Shoes
       move3 x, y
     end
   end
-=end
 end
+=end
+

@@ -25,8 +25,8 @@ require_relative 'shoes/ruby'
 require_relative 'shoes/helper_methods'
 require_relative 'shoes/colors'
 
-require_relative 'shoes/basic'
-["common", "para", "background", "border",
+require_relative 'shoes/style'
+["common", "background", "border",
   "button", "check", "editbox",
   "editline", "image", "listbox",
   "progress", "radio", "shape",
