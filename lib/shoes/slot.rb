@@ -5,7 +5,7 @@ class Shoes
       opts.each do |k, v|
         instance_variable_set "@#{ k }", v
       end
-      
+      @children = []
       @parent = @app.cslot
       @app.cslot = self
       if block_given?
@@ -13,9 +13,10 @@ class Shoes
         @app.cslot = @parent
       end
     end
-    attr_accessor :width, :height, :real
+    attr_accessor :real, :children
     
     def add(widget, x = 0, y = 0)
+      @children << widget
       @real.pack_start widget.real, expand = false, fill = false
     end
   end
@@ -28,6 +29,7 @@ class Shoes
       @real = Gtk::Layout.new
     end
     def add(widget, x = 0, y = 0)
+      @children << widget
       @real.put widget.real, x, y
     end
   end

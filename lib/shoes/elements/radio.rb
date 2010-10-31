@@ -1,11 +1,25 @@
 class Shoes
   
   class Radio < Element
-    def checked?
+    def initialize(opts = {})
+      super
+      group = nil
+      # Set the radio button group to all other radio buttons in this slot.
+      @parent.children.each do |element|
+        if element.class == Radio
+          group = element.real
+          break
+        end
+      end
+      @real.group = group if group
       
     end
+    
+    def checked?
+      @real.active?
+    end
     def checked=(bool)
-      @real.set_active bool
+      @real.active = bool
     end
     def click(&blk)
       @real.signal_connect "clicked", &blk
@@ -19,7 +33,6 @@ class Shoes
     def radio(opts={}, &blk)
       opts = basic_attributes opts
       b = Gtk::RadioButton.new
-      
       opts[:real], opts[:app] = b, self
       
       ele = Radio.new opts
