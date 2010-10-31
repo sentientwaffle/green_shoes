@@ -1,3 +1,4 @@
+=begin
 class Shoes
   class Basic
     def initialize(args)
@@ -72,6 +73,7 @@ class Shoes
       @real =  eval "@app.#{self.class.to_s.downcase[7..-1]}(#{@args.merge args }).real"
     end
   end
+=end
 =begin
   class Image < Basic; end
   #class Button < Basic; end
