@@ -11,13 +11,14 @@ class Shoes
           break
         end
       end
+      # Group is still nil if this is the first Radio in the slot.
       @real.group = group if group
-      
     end
     
     def checked?
       @real.active?
     end
+    # Setting checked to false doesnt work, just set a different box to true.
     def checked=(bool)
       @real.active = bool
     end
