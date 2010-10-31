@@ -26,8 +26,8 @@ class Shoes
     style.set_bg Gtk::STATE_NORMAL, 65535, 65535, 65535
     
     class << app; self end.class_eval do
-      define_method(:width) { win.size[0] }
-      define_method(:height){ win.size[1] }
+      define_method(:width)  { win.size[0] }
+      define_method(:height) { win.size[1] }
     end
     
     win.set_events Gdk::Event::BUTTON_PRESS_MASK | Gdk::Event::BUTTON_RELEASE_MASK | Gdk::Event::POINTER_MOTION_MASK
@@ -40,7 +40,7 @@ class Shoes
       Gtk.main_quit
       File.delete TMP_PNG_FILE if File.exist? TMP_PNG_FILE
     end if @apps.size == 1
-
+=begin
     win.signal_connect("button_press_event") do
       #mouse_click_control app
     end
@@ -52,7 +52,7 @@ class Shoes
     win.signal_connect("motion_notify_event") do
       #mouse_motion_control app
     end
-    
+=end
     # Canvas is as Layout.
     app.canvas = Layout.new(:app => app)
     # Widgets should go to the Flow.

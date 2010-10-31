@@ -21,7 +21,7 @@ class Shoes
   end
   
   class Layout < Slot
-    def  initialize(opts = {})
+    def initialize(opts = {})
       opts = {
       }.update(opts)
       super
@@ -36,8 +36,8 @@ class Shoes
     def initialize(opts = {})
       opts = {
       }.update(opts)
-      super
       @real = Gtk::VBox.new
+      super
     end
   end
   
@@ -45,25 +45,29 @@ class Shoes
     def initialize(opts = {})
       opts = {
       }.update(opts)
-      super
       @real = Gtk::HBox.new
-      
+      super
     end
   end
   
   class App
-    #def stack(opts = {}, &blk)
-    #  opts = slot_attributes(opts)
-    #  opts[:app] = self
-    #  opts[:real] = Gtk::VBox.new
-    #  Stack.new(opts, &blk)
-    #end
+    def stack(opts = {}, &blk)
+      opts = slot_attributes(opts)
+      opts[:app] = self
+      stak = Stack.new(opts, &blk)
+      self.cslot.add stak
+      
+      stak
+    end
     
-    #def flow(opts = {}, &blk)
-    #  opts = slot_attributes(opts)
-    #  opts[:app] = self
-    #  Flow.new(opts, &blk)
-    #end
+    def flow(opts = {}, &blk)
+      opts = slot_attributes(opts)
+      opts[:app] = self
+      flo = Flow.new(opts, &blk)
+      self.cslot.add flo
+      
+      flo
+    end
   end
 end
 =begin

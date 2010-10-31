@@ -26,7 +26,7 @@ require_relative 'shoes/helper_methods'
 require_relative 'shoes/colors'
 
 require_relative 'shoes/basic'
-["common", "background", "border",
+["common", "para", "background", "border",
   "button", "check", "editbox",
   "editline", "image", "listbox",
   "progress", "radio", "shape",
