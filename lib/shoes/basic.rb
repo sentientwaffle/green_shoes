@@ -1,8 +1,8 @@
 class Shoes
   class Basic
-    def initialize args
+    def initialize(args)
       args.each do |k, v|
-        instance_variable_set "@#{k}", v
+        instance_variable_set "@#{ k }", v
       end
 
       (@app.order << self) unless @noorder
@@ -72,9 +72,9 @@ class Shoes
       @real =  eval "@app.#{self.class.to_s.downcase[7..-1]}(#{@args.merge args }).real"
     end
   end
-
+=begin
   class Image < Basic; end
-  class Button < Basic; end
+  #class Button < Basic; end
 
   class Background < Basic
     def move2 x, y
@@ -113,4 +113,5 @@ class Shoes
       move3 x, y
     end
   end
+=end
 end

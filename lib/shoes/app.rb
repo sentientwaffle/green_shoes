@@ -2,7 +2,7 @@ class Shoes
   class App
     include Types
 
-    def initialize args={}
+    def initialize(args={})
       args.each do |k, v|
         instance_variable_set "@#{k}", v
       end
@@ -14,19 +14,20 @@ class Shoes
       @width_pre, @height_pre = @width, @height
     end
 
-    attr_accessor :cslot, :contents, :canvas, :app, :mccs, :mrcs, :mmcs, :win, :width_pre, :height_pre, :order
+    attr_accessor :cslot, :contents, :canvas, :app, :mccs, :mrcs,
+      :mmcs, :win, :width_pre, :height_pre, :order
 
-    def stack args={}, &blk
-      args[:app] = self
-      Stack.new slot_attributes(args), &blk
-    end
+    #def stack(args={}, &blk)
+    #  args[:app] = self
+    #  Stack.new slot_attributes(args), &blk
+    #end
 
-    def flow args={}, &blk
-      args[:app] = self
-      Flow.new slot_attributes(args), &blk
-    end
-
-    def para *msg
+    #def flow(args={}, &blk)
+    #  args[:app] = self
+    #  Flow.new slot_attributes(args), &blk
+    #end
+=begin
+    def para(*msg)
       args = msg.last.class == Hash ? msg.pop : {}
       args = basic_attributes args
       msg = msg.join + ' ' * 5
@@ -48,7 +49,7 @@ class Shoes
       Para.new args
     end
 
-    def image name, args={}
+    def image(name, args={})
       args = basic_attributes args
       img = Gtk::Image.new name
       @canvas.put img, args[:left], args[:top]
@@ -57,30 +58,32 @@ class Shoes
       Image.new args
     end
 
-    def button name, args={}, &blk
-      args = basic_attributes args
-      b = Gtk::Button.new name
-      b.signal_connect "clicked", &blk if blk
-      @canvas.put b, args[:left], args[:top]
-      b.show_now
-      args[:real], args[:text], args[:app] = b, name, self
-      Button.new args
-    end
+    #def button(name, args={}, &blk)
+    #  args = basic_attributes args
+    #  b = Gtk::Button.new name
+    #  b.signal_connect "clicked", &blk if blk
+    #  @canvas.put b, args[:left], args[:top]
+    #  b.show_now
+    #  args[:real], args[:text], args[:app] = b, name, self
+    #  Button.new args
+    #end
 
-    def edit_line args={}
+    def edit_line(args={})
       args = basic_attributes args
+      puts args[:top]
       el = Gtk::Entry.new
       el.text = args[:text].to_s
       el.signal_connect "changed" do
         yield el
       end if block_given?
+      #el.width_request = args[:width]
       @canvas.put el, args[:left], args[:top]
       el.show_now
       args[:real], args[:app] = el, self
       EditLine.new args
     end
 
-    def animate n=10, &blk
+    def animate(n=10, &blk)
       n, i = 1000 / n, 0
       a = Anim.new
       GLib::Timeout.add n do
@@ -91,11 +94,11 @@ class Shoes
       a
     end
 
-    def motion &blk
+    def motion(&blk)
       @mmcs << blk
     end
 
-    def oval *attrs
+    def oval(*attrs)
       args = attrs.last.class == Hash ? attrs.pop : {}
       case attrs.length
         when 0, 1
@@ -125,7 +128,7 @@ class Shoes
       Oval.new args
     end
 
-    def rect *attrs
+    def rect(*attrs)
       args = attrs.last.class == Hash ? attrs.pop : {}
       case attrs.length
         when 0, 1
@@ -155,7 +158,7 @@ class Shoes
       Rect.new args
     end
 
-    def rgb r, g, b, l=1.0
+    def rgb(r, g, b, l=1.0)
       (r < 1 and g < 1 and b < 1) ? [r, g, b, l] : [r/255.0, g/255.0, b/255.0, l]
     end
 
@@ -163,7 +166,7 @@ class Shoes
       eval "def #{name} #{name}=nil; #{name} ? @#{name}=#{name} : @#{name} end"
     end
 
-    def background pat, args={}
+    def background(pat, args={})
       args[:pattern] = pat
       args[:width] ||= 0
       args[:height] ||= 0
@@ -187,5 +190,6 @@ class Shoes
       args[:app] = self
       Background.new args
     end
+=end
   end
 end

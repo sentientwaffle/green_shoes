@@ -1,13 +1,11 @@
 class Shoes
   class App
     def basic_attributes args={}
-      default = {:left => 0, :top => 0, :width => 0, :height => 0}
-      default.merge args
+      {:left => 0, :top => 0, :width => 0, :height => 0}.update(args)
     end
 
     def slot_attributes args={}
-      default = {:left => nil, :top => nil, :width => 1.0, :height => 0}
-      default.merge args
+      {:left => nil, :top => nil, :width => 1.0, :height => 0}.update(args)
     end
 
     def create_tmp_png surface
@@ -15,7 +13,7 @@ class Shoes
       Gtk::Image.new TMP_PNG_FILE
     end
   end
-
+=begin
   def self.contents_alignment slot
     x, y = slot.left.to_i, slot.top.to_i
     max = Struct.new(:top, :height).new
@@ -99,4 +97,5 @@ class Shoes
   def self.size_allocated? app
     not (app.width_pre == app.width and app.height_pre == app.height)
   end
+=end
 end

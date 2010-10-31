@@ -1,15 +1,84 @@
+begin
 class Shoes
   class Slot
-    def initialize args={}
-      @initials = args
-      args.each do |k, v|
+    def initialize(opts = {})
+      opts.each do |k, v|
+        instance_variable_set "@#{ k }", v
+      end
+      
+      @parent = @app.cslot
+      @app.cslot = self
+      if block_given?
+        yield
+        @app.cslot = @parent
+      end
+    end
+    attr_accessor :width, :height, :real
+    
+    def add(widget, x = 0, y = 0)
+      @real.pack_start widget.real, expand = false, fill = false
+    end
+  end
+  
+  class Layout < Slot
+    def  initialize(opts = {})
+      opts = {
+      }.update(opts)
+      super
+      @real = Gtk::Layout.new
+    end
+    def add(widget, x = 0, y = 0)
+      @real.put widget.real, x, y
+    end
+  end
+  
+  class Stack < Slot
+    def initialize(opts = {})
+      opts = {
+      }.update(opts)
+      super
+      @real = Gtk::VBox.new
+    end
+  end
+  
+  class Flow < Slot
+    def initialize(opts = {})
+      opts = {
+      }.update(opts)
+      super
+      @real = Gtk::HBox.new
+      
+    end
+  end
+  
+  class App
+    #def stack(opts = {}, &blk)
+    #  opts = slot_attributes(opts)
+    #  opts[:app] = self
+    #  opts[:real] = Gtk::VBox.new
+    #  Stack.new(opts, &blk)
+    #end
+    
+    #def flow(opts = {}, &blk)
+    #  opts = slot_attributes(opts)
+    #  opts[:app] = self
+    #  Flow.new(opts, &blk)
+    #end
+  end
+end
+=begin
+class Shoes
+  class Slot
+    def initialize(opts = {})
+      @initials = opts
+      opts.each do |k, v|
         instance_variable_set "@#{k}", v
       end
       
       Slot.class_eval do
-        attr_accessor *args.keys
+        attr_accessor *opts.keys
       end
-
+      
       @parent = @app.cslot
       @app.cslot = self
       @contents = []
@@ -47,4 +116,5 @@ class Shoes
 
   class Stack < Slot; end
   class Flow < Slot; end
+=end
 end
