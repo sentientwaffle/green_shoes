@@ -20,7 +20,7 @@ class Shoes
   end
   
   class App
-    def editline(opts = {})
+    def edit_line(opts = {})
       opts = basic_attributes opts
       b = Gtk::Entry.new
       
