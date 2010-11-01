@@ -1,7 +1,21 @@
 class Shoes
   
   class TextBlock < Element
-    
+    def contents
+      # TODO
+    end
+    def replace(string)
+      self.text = string
+    end
+    def text
+      @real.text
+    end
+    def text=(string)
+      @real.text = string
+    end
+    def to_s
+      self.text
+    end
   end
   
   class App

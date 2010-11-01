@@ -1,26 +1,24 @@
-Green Shoes
-=========
+= Green Shoes
+A modified version by sentientwaffle
+== TODO
 
-TODO
-----
-
-Elements:
+=== Elements
 * [ ] background
 * [ ] border
-* [-] button
-* [ ] check
+* [x] button
+* [x] check
 * [ ] common
 * [ ] editbox
-* [ ] editline
+* [-] editline
 * [ ] image
 * [ ] listbox
-* [-] para
+* [x] para
 * [ ] progress
-* [ ] radio
+* [x] radio
 * [ ] shape
 * [ ] textblock
 * [ ] timers
 * [ ] video
 
-Styles
-
+=== Styles
+Everything...

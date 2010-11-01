@@ -1,4 +1,3 @@
-begin
 class Shoes
   class Slot
     def initialize(opts = {})
@@ -15,7 +14,7 @@ class Shoes
     end
     attr_accessor :real, :children
     
-    def add(widget, x = 0, y = 0)
+    def add(widget, x = nil, y = nil)
       @children << widget
       @real.pack_start widget.real, expand = false, fill = false
     end
@@ -122,5 +121,6 @@ class Shoes
 
   class Stack < Slot; end
   class Flow < Slot; end
-=end
 end
+=end
+

@@ -38,4 +38,9 @@ end
 require_relative 'shoes/main'
 require_relative 'shoes/app'
 require_relative 'shoes/anim'
+
 require_relative 'shoes/slot'
+["art", "element", "events", "manipulation", "position", "traversing"].each do |w|
+  require_relative "shoes/slots/#{ w }"
+end
+
