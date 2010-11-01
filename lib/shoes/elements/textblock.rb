@@ -2,7 +2,7 @@ class Shoes
   
   class TextBlock < Element
     def contents
-      # TODO
+      @texts
     end
     def replace(string)
       self.text = string
@@ -26,7 +26,7 @@ class Shoes
       lbl = Gtk::Label.new
       lbl.set_markup text
       
-      opts[:real], opts[:text], opts[:app] = lbl, text, self
+      opts[:real], opts[:text], opts[:texts], opts[:app] = lbl, text, texts self
       
       ele = TextBlock.new opts
       @cslot.add ele, opts[:left], opts[:top]
