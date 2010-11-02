@@ -2,12 +2,16 @@ class Shoes
   
   class TextBlock < Element
     def initialize(opts = {})
+      opts[:real] = Gtk::Label.new
+      opts[:markup] = opts[:text] || ""
       super
+      
+      update_style
     end
     def contents
       @texts
     end
-    def replace(string)
+    def replace(string) # alias text=
       self.text = string
     end
     def text
@@ -16,8 +20,22 @@ class Shoes
     def text=(string)
       @real.text = string
     end
-    def to_s
+    def to_s # alias text
       self.text
+    end
+    ########################
+    # Style related methods.
+    ########################
+    def update_style
+      @markup = "<span "
+      @markup += 'underline="single"' if @underline
+      
+      @markup += ">#{ @text }</span>"
+      @real.set_markup @markup
+    end
+    
+    def underline=(bool)
+      @underline = bool
     end
   end
   
@@ -31,14 +49,9 @@ class Shoes
       text = texts.join " "
       opts = basic_attributes {}
       
-      lbl = Gtk::Label.new
-      lbl.set_markup text
-      
-      opts[:real], opts[:text], opts[:texts], opts[:app] = lbl, text, texts, self
+      opts[:text], opts[:texts], opts[:app] = text, texts, self
       
       ele = TextBlock.new opts
-      #@cslot.add ele, opts[:left], opts[:top]
-      ele
     end
   end
   
