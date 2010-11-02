@@ -52,7 +52,7 @@
 :weight
 :width
 :wrap
-end
+=end
 class Shoes
   STYLES = [:align, :angle, :attach, :autoplay, :bottom, :cap, 
     :center, :change, :checked, :click, :curve, :displace_left, 
@@ -64,32 +64,22 @@ class Shoes
     :stroke, :strokewidth, :text, :top, :undercolor, :underline, 
     :variant, :weight, :width, :wrap]
   
-  class App
-    def self.underline(text)
-      "<u>#{ text }</u>"
+  class StyledText
+    def initialize(string, opts = {})
+      @text = string
+      @opts = opts
     end
-  end
-  
-  
-  class Element
-    
-    def style(opts = nil)
-      opts.each do |key, val|
-        if STYLES.include? key
-          instance_eval("#{ key.to_s } = val")
-        end
-      end
-    end
-    
-    def restyle
+    attr_reader :text
+    def to_pango
+      styles = {}
+      styles[:underline] = "single" if opts[:underline] == true
       
+      styles_s = ""
+      styles.each do |style_name, style_val|
+        styles_s += "#{ style_name }=\"#{ style_val }\""
+      end
+      "<span #{ styles_s }>#{ @text }</span>"
     end
-    
-    def underline=(bool)
-      @underline = bool
-      @text = App.underline text
-      restyle
-    end
-    
   end
-=end
+  
+end

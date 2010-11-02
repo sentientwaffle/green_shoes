@@ -27,7 +27,7 @@ class Shoes
       opts[:real], opts[:app] = b, self
       
       ele = EditLine.new opts
-      @cslot.add ele
+      #@cslot.add ele
       ele
     end
   end

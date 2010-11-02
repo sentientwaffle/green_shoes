@@ -18,7 +18,7 @@ class Shoes
       opts[:real], opts[:text], opts[:app] = b, name, self
       
       ele = Button.new opts
-      @cslot.add ele, opts[:left], opts[:top]
+      #@cslot.add ele, opts[:left], opts[:top]
       ele
     end
   end

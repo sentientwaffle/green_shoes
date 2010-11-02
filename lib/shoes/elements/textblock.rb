@@ -1,6 +1,9 @@
 class Shoes
   
   class TextBlock < Element
+    def initialize(opts = {})
+      super
+    end
     def contents
       @texts
     end
@@ -20,16 +23,21 @@ class Shoes
   
   class App
     def para(*texts)
+      if texts.last.class == Hash
+        opts = texts.pop
+      else
+        opts = {}
+      end
       text = texts.join " "
       opts = basic_attributes {}
       
       lbl = Gtk::Label.new
       lbl.set_markup text
       
-      opts[:real], opts[:text], opts[:texts], opts[:app] = lbl, text, texts self
+      opts[:real], opts[:text], opts[:texts], opts[:app] = lbl, text, texts, self
       
       ele = TextBlock.new opts
-      @cslot.add ele, opts[:left], opts[:top]
+      #@cslot.add ele, opts[:left], opts[:top]
       ele
     end
   end

@@ -7,6 +7,9 @@ class Shoes
         instance_variable_set "@#{ k }", v
       end
       @parent = @app.cslot
+      @parent.add self
+      
+      @markup = opts[:text] if text
       
       @opts = opts
     end
