@@ -5,7 +5,6 @@ class Shoes
       opts[:real] = Gtk::Label.new
       opts[:markup] = opts[:text] || ""
       super
-      
       update_style
     end
     def contents
@@ -36,6 +35,7 @@ class Shoes
     
     def underline=(bool)
       @underline = bool
+      update_style
     end
   end
   
@@ -47,7 +47,7 @@ class Shoes
         opts = {}
       end
       text = texts.join " "
-      opts = basic_attributes {}
+      opts = basic_attributes opts
       
       opts[:text], opts[:texts], opts[:app] = text, texts, self
       
