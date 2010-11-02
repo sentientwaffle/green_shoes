@@ -34,7 +34,6 @@ require_relative 'shoes/style'
 ].each do |w|
   require_relative "shoes/elements/#{ w }"
 end
-
 require_relative 'shoes/main'
 require_relative 'shoes/app'
 require_relative 'shoes/anim'

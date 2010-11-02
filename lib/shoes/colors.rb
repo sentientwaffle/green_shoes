@@ -147,4 +147,20 @@ class Shoes
   end
   App::COLORS = {}
   colors.each{|c, r, g, b| App::COLORS[c] = [r, g, b]}
+  
+  # Convert the RGB(A) values to a hex color string.
+  # The `A` is optional.
+  # r, g, b, and a can be Float or Fixnum.
+  def rgb(r, g, b, a = 1.0)
+    c = "#"
+    [r, g, b, a].each do |color|
+      if color.class == Float
+        c += (color * 255).to_s(16)
+      elsif color.class == Fixnum
+        c += color.to_s(16)
+      else
+        throw ArgumentError, "#{ color } is not a Float or Integer"
+      end
+    end
+  end
 end

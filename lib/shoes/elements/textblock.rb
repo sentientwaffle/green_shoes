@@ -28,11 +28,13 @@ class Shoes
     def update_style
       @markup = "<span "
       @markup += 'underline="single"' if @underline
-      
       @markup += ">#{ @text }</span>"
       @real.set_markup @markup
     end
     
+    #def foreground=(color)
+    #  @foreground = rgb(color)
+    #end
     def underline=(bool)
       @underline = bool
       update_style
