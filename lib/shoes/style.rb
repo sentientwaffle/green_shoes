@@ -64,22 +64,5 @@ class Shoes
     :stroke, :strokewidth, :text, :top, :undercolor, :underline, 
     :variant, :weight, :width, :wrap]
   
-  class StyledText
-    def initialize(string, opts = {})
-      @text = string
-      @opts = opts
-    end
-    attr_reader :text
-    def to_pango
-      styles = {}
-      styles[:underline] = "single" if opts[:underline] == true
-      
-      styles_s = ""
-      styles.each do |style_name, style_val|
-        styles_s += "#{ style_name }=\"#{ style_val }\""
-      end
-      "<span #{ styles_s }>#{ @text }</span>"
-    end
-  end
   
 end
