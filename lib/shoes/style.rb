@@ -63,6 +63,8 @@ class Shoes
     :secret, :size, :state, :stretch, :strikecolor, :strikethrough, 
     :stroke, :strokewidth, :text, :top, :undercolor, :underline, 
     :variant, :weight, :width, :wrap]
+  families = Gtk::Invisible.new.pango_context.families
+  FONTS = (families.collect {|family| family.name}).sort
   
   
 end
