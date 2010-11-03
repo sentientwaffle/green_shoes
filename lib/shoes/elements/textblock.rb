@@ -27,7 +27,9 @@ class Shoes
     ########################
     def update_style
       @markup = "<span"
-      {"background" => @fill || nil,
+      {"font_family" => @family || nil,
+      "font_desc" => @font || nil,
+      "background" => @fill || nil,
       "foreground" => @stroke || nil,
       "stretch" => @stretch || nil,
       "strikethrough_color" => @strikecolor || nil,
@@ -39,6 +41,17 @@ class Shoes
       end
       @markup += ">#{ @text }</span>"
       @real.set_markup @markup
+    end
+    
+    def family(fam)
+      @family = fam
+      update_style
+    end
+    # : description
+    #   Should have the form "[FAMILY-LIST] [STYLE-OPTIONS] [SIZE]"
+    def font(description)
+      @font = description
+      update_style
     end
     
     def fill=(color)
