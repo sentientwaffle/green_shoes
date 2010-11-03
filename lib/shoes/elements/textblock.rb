@@ -26,15 +26,22 @@ class Shoes
     # Style related methods.
     ########################
     def update_style
-      @markup = "<span "
-      @markup += 'underline="single"' if @underline
+      @markup = "<span"
+      {
+      "foreground" => @foreground || nil,
+      "underline" => (@underline) ? "single" : nil
+      }.each do |attr_name, attr_val|
+        @markup += " #{ attr_name }=\"#{ attr_val }\"" if attr_val
+      end
+      
       @markup += ">#{ @text }</span>"
       @real.set_markup @markup
     end
     
-    #def foreground=(color)
-    #  @foreground = rgb(color)
-    #end
+    def foreground=(color)
+      @foreground = color
+      update_style
+    end
     def underline=(bool)
       @underline = bool
       update_style
