@@ -36,6 +36,7 @@ class Shoes
       "strikethrough" => (@strikethrough) ? "true" : nil,
       "underline_color" => @undercolor || nil,
       "underline" => (@underline) ? "single" : nil,
+      "variant" => @variant || nil,
       "weight" => @weight || nil
       }.each do |attr_name, attr_val|
         @markup += " #{ attr_name }=\"#{ attr_val }\"" if attr_val
@@ -44,58 +45,30 @@ class Shoes
       @real.set_markup @markup
     end
     
-    def family(fam)
-      @family = fam
-      update_style
+    [:family, :font, :fill, :stroke, :stretch, :strikecolor,
+      :strikethrough, :undercolor, :underline, :variant, :weight
+    ].each do |style|
+      define_method(style.to_s + "=") do |arg|
+        instance_variable_set("@#{ style.to_s }", arg)
+        update_style
+      end
     end
     # : description
     #   Should have the form "[FAMILY-LIST] [STYLE-OPTIONS] [SIZE]"
-    def font(description)
-      @font = description
-      update_style
-    end
     
-    def fill=(color)
-      @fill = color
-      update_style
-    end
-    def stroke=(color)
-      @stroke = color
-      update_style
-    end
-    
+    # : stretch
     # Possible values:
     # "condensed" - a smaller width of letters.
     # "normal" - the standard width of letters.
     # "expanded" - a larger width of letters.
-    def stretch=(str)
-      @stretch = str if %w[condensed normal expanded].include? str
-    end
     
-    def strikecolor(color)
-      @strikecolor = color
-      update_style
-    end
-    def strikethrough=(bool)
-      @strikethrough = bool
-      update_style
-    end
+    # : variant
+    # "normal" - standard font.
+    # "smallcaps" - font with the lower case characters
+    # replaced by smaller variants of the capital characters.
     
-    def undercolor=(color)
-      @undercolor = color
-      update_style
-    end
-    def underline=(bool)
-      @underline = bool
-      update_style
-    end
-    
-    # : str
-    #   "ultralight" || "light" || "normal" || "semibold" || "bold" || "ultrabold" || "heavy"
-    def weight=(wt)
-      @weight = wt
-      update_style
-    end
+    # : weight
+    # "ultralight" || "light" || "normal" || "semibold" || "bold" || "ultrabold" || "heavy"
   end
   
   class App
