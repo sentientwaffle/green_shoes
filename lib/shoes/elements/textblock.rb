@@ -35,7 +35,8 @@ class Shoes
       "strikethrough_color" => @strikecolor || nil,
       "strikethrough" => (@strikethrough) ? "true" : nil,
       "underline_color" => @undercolor || nil,
-      "underline" => (@underline) ? "single" : nil
+      "underline" => (@underline) ? "single" : nil,
+      "weight" => @weight || nil
       }.each do |attr_name, attr_val|
         @markup += " #{ attr_name }=\"#{ attr_val }\"" if attr_val
       end
@@ -86,6 +87,13 @@ class Shoes
     end
     def underline=(bool)
       @underline = bool
+      update_style
+    end
+    
+    # : str
+    #   "ultralight" || "light" || "normal" || "semibold" || "bold" || "ultrabold" || "heavy"
+    def weight=(wt)
+      @weight = wt
       update_style
     end
   end
