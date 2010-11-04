@@ -1,7 +1,7 @@
 class Shoes
   class App
     include Types
-
+    
     def initialize(args={})
       args.each do |k, v|
         instance_variable_set "@#{k}", v
@@ -13,7 +13,11 @@ class Shoes
       @cslot = (@app ||= self)
       @width_pre, @height_pre = @width, @height
     end
-
+    
+    def re_layout
+      @cslot.re_layout
+    end
+    
     attr_accessor :cslot, :contents, :canvas, :app, :mccs, :mrcs,
       :mmcs, :win, :width_pre, :height_pre, :order
 

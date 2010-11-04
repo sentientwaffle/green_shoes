@@ -64,11 +64,15 @@ class Shoes
     app.win = win
 
     app.instance_eval &blk if blk
-
+    
     Gtk.timeout_add 100 do
       #if size_allocated? app
         #call_back_procs app
-      #  app.width_pre, app.height_pre = app.width, app.height
+      w, h = app.width, app.height
+      if (app.width_pre != w) || (app.height_pre != h)
+        app.re_layout
+      end
+      app.width_pre, app.height_pre = w, h
       #end
       #set_cursor_type app
       true

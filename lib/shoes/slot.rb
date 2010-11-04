@@ -12,15 +12,24 @@ class Shoes
         yield
         @app.cslot = @parent
       end
+      
+      @current_x, @current_y = 0, 0
     end
     attr_accessor :real, :children
     
+    # Widget can be an Element or another Slot.
     def add(widget, x = nil, y = nil)
       @children << widget
-      @real.pack_start widget.real, expand = false, fill = false
+      @real.put widget.real, x || @current_x, y || @current_y
     end
+    # Move the widget (which should have already been added) to the new coords.
+    def position(widget, x, y)
+      @real.move widget.real, x, y
+    end
+    
   end
   
+  # TODO:: This class is lame.
   class Layout < Slot
     def initialize(opts = {})
       opts = {
@@ -34,21 +43,69 @@ class Shoes
     end
   end
   
+  # Position widgets above & below each other.
   class Stack < Slot
     def initialize(opts = {})
       opts = {
       }.update(opts)
-      @real = Gtk::VBox.new
+      @real = Gtk::Fixed.new
       super
     end
+    
+    def add(widget, x = nil, y = nil)
+      super
+    end
+    
+    # Reposition the child widgets in the new window dimensions.
+    def re_layout
+      max_h = 0
+      current_y = 0
+      @children.each do |widget|
+        # Re-position the widget.
+        position(widget, 0, current_y)
+        current_y += widget.width
+      end
+      @current_x = 0
+      @current_y = current_y
+    end
   end
-  
+  # Position widgets side by side.
   class Flow < Slot
     def initialize(opts = {})
       opts = {
       }.update(opts)
-      @real = Gtk::HBox.new
+      @real = Gtk::Fixed.new
       super
+    end
+    
+    def add(widget, x = nil, y = nil)
+      super
+    end
+    
+    # Reposition the child widgets in the new window dimensions.
+    # This is where widget wrapping happens.
+    def re_layout
+      t_w = 0
+      t_h = 0
+      max_w = 0
+      max_h = 0
+      current_x = 0
+      current_y = 0
+      @children.each do |widget|
+        max_w = widget.width if widget.width > max_w
+        max_h = widget.height if widget.height > max_h
+        # If the addition of the widget would go over the right side of this container,
+        # wrap around.
+        if t_w + widget.width > self.width
+          current_x = 0
+          current_y += max_h
+        end
+        # Re position
+        position(widget, current_x, current_y)
+        current_x += widget.width
+      end
+      @current_x = current_x
+      @current_y = current_y
     end
   end
   
