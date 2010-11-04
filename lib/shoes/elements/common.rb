@@ -9,7 +9,7 @@ class Shoes
       @parent = @app.cslot
       @parent.add self
       
-      @markup = opts[:text] if text
+      @markup = opts[:text] || ""
       
       @opts = opts
     end

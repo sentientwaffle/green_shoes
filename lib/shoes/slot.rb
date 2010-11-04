@@ -1,3 +1,4 @@
+# CHANGED
 class Shoes
   class Slot
     def initialize(opts = {})
