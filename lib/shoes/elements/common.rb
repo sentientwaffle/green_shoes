@@ -1,7 +1,7 @@
 class Shoes
   
   class Element
-    attr_reader :real
+    attr_accessor :real # debug only -- change to reader
     def initialize(opts = {})
       opts.each do |k, v|
         instance_variable_set "@#{ k }", v
@@ -18,7 +18,11 @@ class Shoes
     end
     
     def height
-      @real.size_request[1]
+      #if self.class.ancestors.include? Slot
+      #  @real.size[1]
+      #else
+        @real.size_request[1]
+      #end
     end
     
     def hide
@@ -44,8 +48,8 @@ class Shoes
     end
     
     def style(opts = nil)
-      return @styles if styles == nil
-      b.set_size_request opts[:width] || @width, opts[:height] || @height
+    #  return @styles if styles == nil
+    #  b.set_size_request opts[:width] || @width, opts[:height] || @height
     end
     
     def toggle
@@ -56,7 +60,11 @@ class Shoes
     end
     
     def width
-      @real.size_request[0]
+      #if self.class.ancestors.include? Slot
+      #  @real.size[0]
+      #else
+        @real.size_request[0]
+      #end
     end
     
   end

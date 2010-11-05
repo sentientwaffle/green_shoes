@@ -14,6 +14,12 @@ Flow
 class Shoes
   class Slot < Element
     def initialize(opts = {})
+      opts = {
+        :left => nil,
+        :top => nil,
+        :width => 1.0,
+        :height => 0
+      }.update(opts)
       opts.each do |k, v|
         instance_variable_set "@#{ k }", v
       end
@@ -126,7 +132,7 @@ class Shoes
   
   class App
     def stack(opts = {}, &blk)
-      opts = slot_attributes(opts)
+      #opts = slot_attributes(opts)
       opts[:app] = self
       stak = Stack.new(opts, &blk)
       self.cslot.add stak
@@ -135,7 +141,7 @@ class Shoes
     end
     
     def flow(opts = {}, &blk)
-      opts = slot_attributes(opts)
+      #opts = slot_attributes(opts)
       opts[:app] = self
       flo = Flow.new(opts, &blk)
       self.cslot.add flo
