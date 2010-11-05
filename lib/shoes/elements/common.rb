@@ -1,7 +1,7 @@
 class Shoes
   
   class Element
-    attr_accessor :real, :x, :y # debug only -- change to reader
+    attr_accessor :real, :x, :y, :parent
     def initialize(opts = {})
       opts.each do |k, v|
         instance_variable_set "@#{ k }", v
@@ -18,11 +18,7 @@ class Shoes
     end
     
     def height
-      #if self.class.ancestors.include? Slot
-      #  @real.size[1]
-      #else
-        @real.size_request[1]
-      #end
+      @real.size_request[1]
     end
     
     def hide
@@ -33,7 +29,7 @@ class Shoes
     end
     
     def move(opts)
-      args = {:left => 0, :top => 0}.update(opts)
+      #args = {:left => 0, :top => 0}.update(opts)
     end
     
     def parent

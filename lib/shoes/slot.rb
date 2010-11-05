@@ -12,6 +12,41 @@ Flow
 
 =end
 class Shoes
+  class Layout
+    attr_accessor :real, :height, :width, :x, :y
+    def initialize(opts = {})
+      opts.each do |k, v|
+        instance_variable_set "@#{ k }", v
+      end
+      @children = []
+      @parent = @app.cslot
+      @app.cslot = self
+      if block_given?
+        yield
+        @app.cslot = @parent
+      end
+      
+      @x, @y = 0, 0
+      @width, @height = @app.width, @app.height
+      @real = Gtk::Layout.new
+    end
+    def add(widget, x, y)
+      widget.x, widget.y = x, y
+      if widget.class.ancestors.include? Slot
+        
+      else
+        @real.put widget.real, x, y unless widget.class.ancestors.include? Slot
+      end
+    end
+    def position(widget, x, y)
+      widget.x, widget.y = x,y#x + widget.parent.x, y + widget.parent.y
+      if not widget.class.ancestors.include? Slot
+        @real.move widget.real, x, y
+      end
+    end
+  end
+  
+  
   class Slot
     def initialize(opts = {})
       opts = {
@@ -30,45 +65,35 @@ class Shoes
         yield
         @app.cslot = @parent
       end
-      
+      @x, @y = 0, 0 # FIXME
       @current_x, @current_y = 0, 0
     end
-    attr_accessor :real, :children, :x, :y, :height, :width
+    attr_accessor :real, :children, :x, :y
     
-    # Widget can be an Element or another Slot.
-    #def add(widget, x = nil, y = nil)
-    #  @children << widget
-    #  @real.put widget.real, x || @current_x, y || @current_y
-    #end
-    # Move the widget (which should have already been added) to the new coords.
-    def position(widget, x, y)
-      widget.x, widget.y = x, y
-      if not widget.class.ancestors.include? Slot
-        @app.canvas.real.move widget.real, x, y
+    def width
+      @parent.width if @width == 0
+      if @width.class == Float
+        @width * @parent.width
+      elsif @width.class == Fixnum
+        @width
+      end
+    end
+    def height
+      @parent.height if @height == 0
+      if @height.class == Float
+        @height * @parent.height
+      elsif @height.class == Fixnum
+        @height
       end
     end
     
-  end
-  
-  # TODO:: This class is lame.
-  class Layout < Slot
-    def initialize(opts = {})
-      opts = {
-      }.update(opts)
-      super
-      @real = Gtk::Layout.new
-    end
-    def add(widget, x = 0, y = 0)
-      @children << widget
-      @app.canvas.real.put widget.real, x, y unless widget.class.ancestors.include? Slot
-    end
   end
   
   # Position widgets above & below each other.
   class Stack < Slot
     def add(widget, x = nil, y = nil)
       @children << widget
-      @app.canvas.add widget, 0, 0 unless widget.class.ancestors.include? Slot
+      @app.canvas.add widget, 0, 0
       re_layout
     end
     
@@ -78,7 +103,7 @@ class Shoes
       current_y = 0
       @children.each do |widget|
         # Re-position the widget.
-        position(widget, 0, current_y)
+        @app.canvas.position(widget, 0, current_y)
         current_y += widget.height
       end
       @current_y = current_y
@@ -88,7 +113,7 @@ class Shoes
   class Flow < Slot
     def add(widget, x = nil, y = nil)
       @children << widget
-      @app.canvas.add widget, 0, 0 unless widget.class.ancestors.include? Slot
+      @app.canvas.add widget, 0, 0
       re_layout
     end
     
@@ -106,12 +131,12 @@ class Shoes
         max_h = widget.height if widget.height > max_h
         # If the addition of the widget would go over the
         # right side of this container, wrap around.
-        if t_w + widget.width > @width
+        if t_w + widget.width > self.width
           current_x = 0
           current_y += max_h
         end
         # Re position
-        position(widget, current_x, current_y)
+        @app.canvas.position(widget, current_x, current_y)
         current_x += widget.width
       end
       @current_x = current_x
@@ -139,56 +164,3 @@ class Shoes
     end
   end
 end
-=begin
-class Shoes
-  class Slot
-    def initialize(opts = {})
-      @initials = opts
-      opts.each do |k, v|
-        instance_variable_set "@#{k}", v
-      end
-      
-      Slot.class_eval do
-        attr_accessor *opts.keys
-      end
-      
-      @parent = @app.cslot
-      @app.cslot = self
-      @contents = []
-      @parent.contents << self
-      if block_given?
-        yield
-        @app.cslot = @parent
-      else
-        @left = @top = 0
-      end
-    end
-
-    attr_accessor :contents
-    attr_reader :parent, :initials
-
-    def move3 x, y
-      @left, @top = x, y
-    end
-
-    def positioning x, y, max
-      @width = (parent.width * @initials[:width]).to_i if @initials[:width].is_a? Float
-      if parent.is_a?(Flow) and x + @width <= parent.left + parent.width
-        move3 x, max.top
-        @height = Shoes.contents_alignment self
-        max = self if max.height < @height
-      else
-        move3 parent.left, max.top + max.height
-        @height = Shoes.contents_alignment self
-        max = self
-      end
-      max.height = @height = @initials[:height] unless @initials[:height].zero?
-      max
-    end
-  end
-
-  class Stack < Slot; end
-  class Flow < Slot; end
-end
-=end
-
