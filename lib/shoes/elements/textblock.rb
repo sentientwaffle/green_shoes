@@ -7,6 +7,7 @@ class Shoes
       super
       update_style
     end
+    
     def contents
       @texts
     end

@@ -18,7 +18,7 @@ class Shoes
     end
     
     def height
-      @real.height_request
+      @real.size_request[1]
     end
     
     def hide
@@ -56,7 +56,7 @@ class Shoes
     end
     
     def width
-      @real.width_request
+      @real.size_request[0]
     end
     
   end

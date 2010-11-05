@@ -1,6 +1,18 @@
-# CHANGED
+=begin
+Slot
+  
+Layout
+  
+Stack
+  add
+  re_layout
+Flow
+  add
+  re_layout
+
+=end
 class Shoes
-  class Slot
+  class Slot < Element
     def initialize(opts = {})
       opts.each do |k, v|
         instance_variable_set "@#{ k }", v
@@ -18,10 +30,10 @@ class Shoes
     attr_accessor :real, :children
     
     # Widget can be an Element or another Slot.
-    def add(widget, x = nil, y = nil)
-      @children << widget
-      @real.put widget.real, x || @current_x, y || @current_y
-    end
+    #def add(widget, x = nil, y = nil)
+    #  @children << widget
+    #  @real.put widget.real, x || @current_x, y || @current_y
+    #end
     # Move the widget (which should have already been added) to the new coords.
     def position(widget, x, y)
       @real.move widget.real, x, y
@@ -53,7 +65,9 @@ class Shoes
     end
     
     def add(widget, x = nil, y = nil)
-      super
+      @children << widget
+      @real.put widget.real, 0, 0
+      re_layout
     end
     
     # Reposition the child widgets in the new window dimensions.
@@ -63,9 +77,8 @@ class Shoes
       @children.each do |widget|
         # Re-position the widget.
         position(widget, 0, current_y)
-        current_y += widget.width
+        current_y += widget.height
       end
-      @current_x = 0
       @current_y = current_y
     end
   end
@@ -79,7 +92,9 @@ class Shoes
     end
     
     def add(widget, x = nil, y = nil)
-      super
+      @children << widget
+      @real.put widget.real, 0, 0
+      re_layout
     end
     
     # Reposition the child widgets in the new window dimensions.
@@ -94,8 +109,8 @@ class Shoes
       @children.each do |widget|
         max_w = widget.width if widget.width > max_w
         max_h = widget.height if widget.height > max_h
-        # If the addition of the widget would go over the right side of this container,
-        # wrap around.
+        # If the addition of the widget would go over the
+        # right side of this container, wrap around.
         if t_w + widget.width > self.width
           current_x = 0
           current_y += max_h
