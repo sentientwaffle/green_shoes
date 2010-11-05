@@ -1,7 +1,7 @@
 class Shoes
   
   class Element
-    attr_accessor :real # debug only -- change to reader
+    attr_accessor :real, :x, :y # debug only -- change to reader
     def initialize(opts = {})
       opts.each do |k, v|
         instance_variable_set "@#{ k }", v

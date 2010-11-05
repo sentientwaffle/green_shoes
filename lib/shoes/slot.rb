@@ -12,7 +12,7 @@ Flow
 
 =end
 class Shoes
-  class Slot < Element
+  class Slot
     def initialize(opts = {})
       opts = {
         :left => nil,
@@ -33,7 +33,7 @@ class Shoes
       
       @current_x, @current_y = 0, 0
     end
-    attr_accessor :real, :children
+    attr_accessor :real, :children, :x, :y, :height, :width
     
     # Widget can be an Element or another Slot.
     #def add(widget, x = nil, y = nil)
@@ -42,7 +42,10 @@ class Shoes
     #end
     # Move the widget (which should have already been added) to the new coords.
     def position(widget, x, y)
-      @real.move widget.real, x, y
+      widget.x, widget.y = x, y
+      if not widget.class.ancestors.include? Slot
+        @app.canvas.real.move widget.real, x, y
+      end
     end
     
   end
@@ -57,22 +60,15 @@ class Shoes
     end
     def add(widget, x = 0, y = 0)
       @children << widget
-      @real.put widget.real, x, y
+      @app.canvas.real.put widget.real, x, y unless widget.class.ancestors.include? Slot
     end
   end
   
   # Position widgets above & below each other.
   class Stack < Slot
-    def initialize(opts = {})
-      opts = {
-      }.update(opts)
-      @real = Gtk::Fixed.new
-      super
-    end
-    
     def add(widget, x = nil, y = nil)
       @children << widget
-      @real.put widget.real, 0, 0
+      @app.canvas.add widget, 0, 0 unless widget.class.ancestors.include? Slot
       re_layout
     end
     
@@ -90,16 +86,9 @@ class Shoes
   end
   # Position widgets side by side.
   class Flow < Slot
-    def initialize(opts = {})
-      opts = {
-      }.update(opts)
-      @real = Gtk::Fixed.new
-      super
-    end
-    
     def add(widget, x = nil, y = nil)
       @children << widget
-      @real.put widget.real, 0, 0
+      @app.canvas.add widget, 0, 0 unless widget.class.ancestors.include? Slot
       re_layout
     end
     
@@ -117,7 +106,7 @@ class Shoes
         max_h = widget.height if widget.height > max_h
         # If the addition of the widget would go over the
         # right side of this container, wrap around.
-        if t_w + widget.width > self.width
+        if t_w + widget.width > @width
           current_x = 0
           current_y += max_h
         end
