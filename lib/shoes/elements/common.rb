@@ -1,7 +1,7 @@
 class Shoes
   
   class Element
-    attr_accessor :real, :x, :y, :parent
+    attr_accessor :real, :x, :y, :cx, :cy, :parent
     def initialize(opts = {})
       opts.each do |k, v|
         instance_variable_set "@#{ k }", v
@@ -10,6 +10,8 @@ class Shoes
       @parent.add self
       
       @markup = opts[:text] || ""
+      
+      @x, @cx, @y, @cy = [0] * 4
       
       @opts = opts
     end

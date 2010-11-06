@@ -54,7 +54,7 @@ class Shoes
     end
 =end
     # Canvas is as Layout.
-    app.canvas = Layout.new(:app => app)
+    app.canvas = Canvas.new(:app => app)
     # Widgets should go to the Flow.
     app.cslot = Flow.new(:app => app)
     app.canvas.add(app.cslot, 0, 0)
