@@ -66,5 +66,4 @@ class Shoes
   families = Gtk::Invisible.new.pango_context.families
   FONTS = (families.collect {|family| family.name}).sort
   
-  
 end

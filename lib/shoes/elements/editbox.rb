@@ -1,30 +1,34 @@
 class Shoes
   
   class EditBox < Element
-    def change
+    def initialize(opts = {}, &blk)
+      opts = opts[:app].basic_attributes opts
+      #opts = {:height => 100, :width => 100}.update(opts)
+      opts[:real] = Gtk::TextView.new
+      opts[:markup] = opts[:text] if opts[:text]
+      
+      super
+      @real.signal_connect "clicked", &blk if blk
+      @real.buffer.text = opts[:markup]
+    end
+    def change(&blk)
       @real.signal_connect "changed", &blk
     end
     def focus
       @real.grab_focus
     end
     def text
-      @real.text
+      @real.buffer.text
     end
-    def text=
-      @real.text = str
+    def text=(str)
+      @real.buffer.text = str
     end
   end
   
   class App
-    def button(name, opts={}, &blk)
-      opts = basic_attributes opts
-      b = Gtk::Button.new name
-      b.signal_connect "clicked", &blk if blk
-      
-      opts[:real], opts[:text], opts[:app] = b, name, self
-      
-      ele = Button.new opts
-      #@cslot.add ele, opts[:left], opts[:top]
+    def edit_box(opts = {}, &blk)
+      opts[:app] = self
+      ele = EditBox.new opts
       ele
     end
   end

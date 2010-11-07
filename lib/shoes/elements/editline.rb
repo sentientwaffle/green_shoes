@@ -1,4 +1,3 @@
-=begin
 class Shoes
   
   class EditLine < Element
@@ -34,4 +33,3 @@ class Shoes
   end
   
 end
-=end

@@ -2,6 +2,8 @@ class Shoes
   
   class TextBlock < Element
     def initialize(opts = {})
+      opts = opts[:app].basic_attributes opts
+      
       opts[:real] = Gtk::Label.new
       opts[:markup] = opts[:text] || ""
       super
@@ -73,19 +75,27 @@ class Shoes
   end
   
   class App
-    def para(*texts)
-      if texts.last.class == Hash
-        opts = texts.pop
-      else
-        opts = {}
-      end
+    def text_block(prefered_font, *texts)
+      opts = {:font => "#{ prefered_font }"}.update(
+        if texts.last.class == Hash
+          texts.pop
+        else
+          {}
+        end )
       text = texts.join " "
-      opts = basic_attributes opts
       
       opts[:text], opts[:texts], opts[:app] = text, texts, self
       
       ele = TextBlock.new opts
     end
+    # The last argument can be a hash with additional options.
+    def para(*texts) text_block(12, *texts); end
+    def banner(*texts) text_block(48, *texts); end
+    def title(*texts) text_block(34, *texts); end
+    def subtitle(*texts) text_block(26, *texts); end
+    def tagline(*texts) text_block(18, *texts); end
+    def caption(*texts) text_block(14, *texts); end
+    def inscription(*texts) text_block(10, *texts); end
   end
   
 end
