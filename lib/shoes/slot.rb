@@ -37,7 +37,9 @@ class Shoes
     def re_layout() end
   end
   
-  
+  # cx, cy : the current x and y coordinates.
+  # ix, iy : the i is for iterate (it doesnt make too much sense, stop trying to figure it out)
+  #         ix and iy are the next coordinates for a child to be added to.
   class Slot
     NO_PREF = 0
     
@@ -63,6 +65,9 @@ class Shoes
     end
     attr_accessor :real, :children, :x, :y, :cx, :cy, :ix, :iy, :cw, :ch, :parent
     
+    # FIXME Only call these writers on the top level Flow!!!
+    attr_writer :width, :height
+    
     def width
       return @cw if @width == NO_PREF
       if @width.class == Float
@@ -71,9 +76,6 @@ class Shoes
         @width
       end
     end
-    # Only call these on the top level Flow!!!
-    attr_writer :width, :height
-      
     def height
       return @ch if @height == NO_PREF
       if @height.class == Float
@@ -104,8 +106,6 @@ class Shoes
         @app.canvas.position(widget, @ix, @iy)
         @iy += widget.height
       end
-      
-      #@parent.re_layout
     end
   end
   # Position widgets side by side.
@@ -133,7 +133,6 @@ class Shoes
         @app.canvas.position(widget, @ix, @iy)
         @ix += widget.width
       end
-      #@parent.re_layout
     end
     
   end
