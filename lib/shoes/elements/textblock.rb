@@ -75,8 +75,9 @@ class Shoes
   end
   
   class App
-    def text_block(prefered_font, *texts)
-      opts = {:font => "#{ prefered_font }"}.update(
+    # Preference is a single style, passed by banner or another method.
+    def text_block(preference, *texts)
+      opts = preference.update(
         if texts.last.class == Hash
           texts.pop
         else
@@ -89,13 +90,24 @@ class Shoes
       ele = TextBlock.new opts
     end
     # The last argument can be a hash with additional options.
-    def para(*texts) text_block(12, *texts); end
-    def banner(*texts) text_block(48, *texts); end
-    def title(*texts) text_block(34, *texts); end
-    def subtitle(*texts) text_block(26, *texts); end
-    def tagline(*texts) text_block(18, *texts); end
-    def caption(*texts) text_block(14, *texts); end
-    def inscription(*texts) text_block(10, *texts); end
+    def para(*texts) text_block(:font => 12, *texts); end
+    def banner(*texts) text_block(:font => 48, *texts); end
+    def title(*texts) text_block(:font => 34, *texts); end
+    def subtitle(*texts) text_block(:font => 26, *texts); end
+    def tagline(*texts) text_block(:font => 18, *texts); end
+    def caption(*texts) text_block(:font => 14, *texts); end
+    def inscription(*texts) text_block(:font => 10, *texts); end
+    
+    def code(*texts) text_block(:family => "Monospace", *texts); end
+    def del(*texts) text_block(:strikethrough => true, *texts); end
+    def em(*texts) text_block(:style => "italic", *texts); end
+    def ins(*texts) text_block(:underline => true, *texts); end
+    # TODO implement link
+    def span(*texts) text_block({}, *texts); end
+    def strong(*texts) text_block(:weight => "bold", *texts); end
+    # TODO implement sub
+    # TODO implement sup
+    
   end
   
 end
