@@ -71,6 +71,9 @@ class Shoes
         @width
       end
     end
+    # Only call these on the top level Flow!!!
+    attr_writer :width, :height
+      
     def height
       return @ch if @height == NO_PREF
       if @height.class == Float
@@ -95,7 +98,6 @@ class Shoes
     def re_layout
       @ix, @iy = 0, 0
       @children.each do |widget|
-        p "#{ widget.class } has height #{ widget.height }"
         @cw = widget.width if widget.width > @cw
         @ch = widget.height if widget.height > @ch
         # Re-position the widget.
@@ -109,7 +111,6 @@ class Shoes
   # Position widgets side by side.
   class Flow < Slot
     def add(widget, x = nil, y = nil)
-      p @cy
       @children << widget
       @app.canvas.add(widget, @ix, @iy)
       re_layout

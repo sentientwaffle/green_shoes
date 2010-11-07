@@ -70,7 +70,8 @@ class Shoes
         #call_back_procs app
       w, h = app.width, app.height
       if (app.width_pre != w) || (app.height_pre != h)
-        app.re_layout
+        app.cslot.width, app.cslot.height = w, h
+        app.cslot.re_layout
       end
       app.width_pre, app.height_pre = w, h
       #end
