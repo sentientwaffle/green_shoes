@@ -6,7 +6,7 @@ class Range
 end
 
 class Object
-  def alert(msg)
+  def alert msg
     dialog = Gtk::MessageDialog.new(
       app.win,
       Gtk::Dialog::MODAL,
@@ -18,21 +18,16 @@ class Object
     dialog.run
     dialog.destroy
   end
-  
-  # Convert the RGB(A) values to a hex color string.
-  # The `A` is optional.
-  # r, g, b, and a can be Float or Fixnum.
-  def rgb(r, g, b, a = 1.0)
-    c = "#"
-    [r, g, b, a].each do |color|
-      if color.class == Float
-        c += (color * 255).to_s(16)
-      elsif color.class == Fixnum
-        c += color.to_s(16)
-      else
-        throw ArgumentError, "#{ color } is not a Float or Integer"
-      end
+end
+
+class String
+  def mindex str
+    n, links = 0, []
+    loop do
+      break unless n= self.index(str, n)
+      links << n
+      n += 1
     end
-    return c
+    links
   end
 end

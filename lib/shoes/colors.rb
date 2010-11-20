@@ -146,6 +146,5 @@ class Shoes
     colors.each{|color| define_method(color[0]){[color[1]/255.0, color[2]/255.0, color[3]/255.0]}}
   end
   App::COLORS = {}
-  colors.each { |c, r, g, b| App::COLORS[c] = [r, g, b] }
-  
+  colors.each{|c, r, g, b| App::COLORS[c] = [r, g, b]}
 end
