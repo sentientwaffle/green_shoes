@@ -1,12 +1,12 @@
 class Shoes
   class App
     def basic_attributes args={}
-      default = {left: 0, top: 0, width: 0, height: 0, angle: 0, curve: 0}
+      default = {left => 0, top => 0, width => 0, height => 0, angle => 0, curve => 0}
       default.merge args
     end
 
     def slot_attributes args={}
-      default = {left: nil, top: nil, width: 1.0, height: 0}
+      default = {left => nil, top => nil, width => 1.0, height => 0}
       default.merge args
     end
 

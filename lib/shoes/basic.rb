@@ -108,7 +108,7 @@ class Shoes
       @left, @top, @width, @height = parent.left, parent.top, parent.width, parent.height
       m = self.class.to_s.downcase[7..-1]
       args = eval "{#{@args.keys.map{|k| "#{k}: @#{k}"}.join(', ')}}"
-      args = [@pattern, args.merge({create_real: true, nocontrol: true})]
+      args = [@pattern, args.merge({create_real => true, nocontrol => true})]
       pt = @app.send(m, *args)
       @real = pt.real
       @width, @height = 0, 0
@@ -130,7 +130,7 @@ class Shoes
       @width = (@left + parent.width <= @app.width) ? parent.width : @app.width - @left
       @height = 20 if @height.zero?
       m = self.class.to_s.downcase[7..-1]
-      args = [s, @args.merge({left: @left, top: @top, width: @width, height: @height, create_real: true, nocontrol: true})]
+      args = [s, @args.merge({left => @left, top => @top, width: @width, height: @height, create_real: true, nocontrol: true})]
       tb = @app.send(m, *args)
       @real, @height = tb.real, tb.height
     end
