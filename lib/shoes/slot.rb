@@ -23,7 +23,7 @@ class Shoes
       if widget.class.ancestors.include? Slot
         # ???
       else
-        @real.put widget.real, widget.cx, widget.cy unless widget.class.ancestors.include? Slot
+        @real.put widget.real, widget.cx, widget.cy
       end
     end
     def position(widget, x, y)
@@ -34,9 +34,9 @@ class Shoes
         widget.re_layout
       end
     end
-    def re_layout() end
   end
   
+  # x, y : the desired x and y coordinates in relation to the parent.
   # cx, cy : the current x and y coordinates.
   # ix, iy : the i is for iterate (it doesnt make too much sense, stop trying to figure it out)
   #         ix and iy are the next coordinates for a child to be added to.
@@ -63,7 +63,7 @@ class Shoes
         @app.cslot = @parent
       end
     end
-    attr_accessor :real, :children, :x, :y, :cx, :cy, :ix, :iy, :cw, :ch, :parent
+    attr_accessor :children, :x, :y, :cx, :cy, :ix, :iy, :cw, :ch, :parent
     
     # FIXME Only call these writers on the top level Flow!!!
     attr_writer :width, :height
@@ -89,7 +89,7 @@ class Shoes
   
   # Position widgets above & below each other.
   class Stack < Slot
-    def add(widget, x = nil, y = nil)
+    def add(widget)
       @children << widget
       @app.canvas.add(widget, @ix, @iy)
       @iy += widget.height
@@ -110,7 +110,7 @@ class Shoes
   end
   # Position widgets side by side.
   class Flow < Slot
-    def add(widget, x = nil, y = nil)
+    def add(widget)
       @children << widget
       @app.canvas.add(widget, @ix, @iy)
       re_layout

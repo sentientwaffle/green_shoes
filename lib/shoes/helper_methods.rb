@@ -1,7 +1,9 @@
 class Shoes
   class App
     def basic_attributes args={}
-      {:left => 0, :top => 0, :width => 0, :height => 0, :x => 0, :y => 0}.update(args)
+      {:left => 0, :top => 0, :width => 0,
+        :height => 0, :x => 0, :y => 0,
+      }.update(args)
     end
 
     def slot_attributes args={}
