@@ -9,17 +9,18 @@ class Shoes
       App.class_eval do
         attr_accessor *(args.keys - [:width, :height, :title])
       end
-      @contents, @canvas, @mccs, @mrcs, @mmcs, @mlcs, @shcs, @win, @order = 
-        [], nil, [], [], [], [], [], nil, []
+      @contents, @canvas, @mccs, @mrcs, @mmcs, @mlcs, @shcs, @mcs, @win, @order = 
+        [], nil, [], [], [], [], [], [], nil, []
       @cslot = (@app ||= self)
+      @cmask = nil
       @top_slot = nil
       @width_pre, @height_pre = @width, @height
       @mouse_button, @mouse_pos = 0, [0, 0]
       @fill, @stroke = black, black
     end
 
-    attr_accessor :cslot, :top_slot, :contents, :canvas, :app, :mccs, :mrcs, :mmcs, 
-      :mlcs, :shcs, :win, :width_pre, :height_pre, :order
+    attr_accessor :cslot, :cmask, :top_slot, :contents, :canvas, :app, :mccs, :mrcs, :mmcs, 
+      :mlcs, :shcs, :mcs, :win, :width_pre, :height_pre, :order
     attr_writer :mouse_button, :mouse_pos
 
     def stack args={}, &blk
@@ -30,6 +31,10 @@ class Shoes
     def flow args={}, &blk
       args[:app] = self
       Flow.new slot_attributes(args), &blk
+    end
+
+    def mask &blk
+      @mcs << Mask.new(self, &blk)
     end
 
     def clear &blk
@@ -102,6 +107,10 @@ class Shoes
       Image.new args
     end
 
+    def imagesize name
+      Gtk::Image.new(name).size_request
+    end
+
     def button name, args={}, &blk
       args = basic_attributes args
       b = Gtk::Button.new name
@@ -127,6 +136,22 @@ class Shoes
       args[:real], args[:app] = el, self
       EditLine.new args
     end
+    
+    def list_box args={}, &blk
+      args = basic_attributes args
+      args[:width] = 200 if args[:width].zero?
+      cb = Gtk::ComboBox.new
+      args[:items] ||= []
+      args[:items].each{|item| cb.append_text item.to_s}
+      cb.active = args[:items].index(args[:choose]) if args[:choose]
+      cb.signal_connect("changed") do
+        blk.call args[:items][cb.active]
+      end if blk
+      @canvas.put cb, args[:left], args[:top]
+      cb.show_now
+      args[:real], args[:app] = cb, self
+      ListBox.new args
+    end
 
     def animate n=10, &blk
       n, i = 1000 / n, 0
@@ -139,8 +164,27 @@ class Shoes
       a
     end
 
+    def every n=1, &blk
+      animate 1.0/n, &blk
+    end
+
+    def timer n=1, &blk
+      GLib::Timeout.add 1000*n do
+        blk.call
+        Shoes.repaint_all_by_order self
+        false
+      end
+    end
+
     def motion &blk
       @mmcs << blk
+    end
+
+    def keypress &blk
+      win.set_events Gdk::Event::BUTTON_PRESS_MASK | Gdk::Event::BUTTON_RELEASE_MASK | Gdk::Event::POINTER_MOTION_MASK | Gdk::Event::KEY_PRESS_MASK
+      win.signal_connect("key_press_event") do |w, e|
+        blk[Gdk::Keyval.to_name(e.keyval)]
+      end
     end
 
     def mouse
@@ -182,7 +226,7 @@ class Shoes
       @canvas.put img, args[:left], args[:top]
       img.show_now
       args[:real], args[:app] = img, self
-      Shape.new args
+      Oval.new args
     end
 
     def rect *attrs
@@ -218,7 +262,7 @@ class Shoes
       @canvas.put img, args[:left], args[:top]
       img.show_now
       args[:real], args[:app] = img, self
-      Shape.new args
+      Rect.new args
     end
 
     def line *attrs

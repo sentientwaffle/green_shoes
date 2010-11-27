@@ -6,7 +6,8 @@ class Shoes
       end
 
       (@app.order << self) unless @noorder
-      (@app.cslot.contents << self) unless @nocontrol
+      (@app.cslot.contents << self) unless @nocontrol or @app.cmask
+      (@app.cmask.contents << self) if @app.cmask
       @parent = @app.cslot
       
       Basic.class_eval do
@@ -14,13 +15,24 @@ class Shoes
       end
 
       (@width, @height = @real.size_request) if @real and !self.is_a?(TextBlock)
+
+      @margin ||= [0, 0, 0, 0]
+      @margin = [@margin, @margin, @margin, @margin] if @margin.is_a? Integer
+      margin_left, margin_top, margin_right, margin_bottom = @margin
+      @margin_left ||= margin_left
+      @margin_top ||= margin_top
+      @margin_right ||= margin_right
+      @margin_bottom ||= margin_bottom
+      @width += (@margin_left + @margin_right)
+      @height += (@margin_top + @margin_bottom)
+
       @proc = nil
       [:app, :real].each{|k| args.delete k}
       @args = args
       @hided, @shows = false, true
     end
 
-    attr_reader :parent, :click_proc, :release_proc, :args, :shows
+    attr_reader :parent, :click_proc, :release_proc, :args, :shows, :margin_left, :margin_top, :margin_right, :margin_bottom
     attr_accessor :hided
 
     def move x, y
@@ -108,7 +120,7 @@ class Shoes
       @left, @top, @width, @height = parent.left, parent.top, parent.width, parent.height
       m = self.class.to_s.downcase[7..-1]
       args = eval "{#{@args.keys.map{|k| "#{k}: @#{k}"}.join(', ')}}"
-      args = [@pattern, args.merge({create_real => true, nocontrol => true})]
+      args = [@pattern, args.merge({create_real: true, nocontrol: true})]
       pt = @app.send(m, *args)
       @real = pt.real
       @width, @height = 0, 0
@@ -118,11 +130,17 @@ class Shoes
   class Border < Pattern; end
 
   class Shape < Basic; end
+  class Rect < Shape; end
+  class Oval < Shape; end
   
   class TextBlock < Basic
     def initialize args
       super
       @app.mlcs << self  unless @real
+    end
+
+    def text
+      @args[:markup]
     end
     
     def text= s
@@ -130,7 +148,7 @@ class Shoes
       @width = (@left + parent.width <= @app.width) ? parent.width : @app.width - @left
       @height = 20 if @height.zero?
       m = self.class.to_s.downcase[7..-1]
-      args = [s, @args.merge({left => @left, top => @top, width: @width, height: @height, create_real: true, nocontrol: true})]
+      args = [s, @args.merge({left: @left, top: @top, width: @width, height: @height, create_real: true, nocontrol: true})]
       tb = @app.send(m, *args)
       @real, @height = tb.real, tb.height
     end
@@ -164,6 +182,12 @@ class Shoes
     def move2 x, y
       @app.canvas.move @real, x, y
       move3 x, y
+    end
+  end
+  
+  class ListBox < Basic
+    def text
+      @items[@real.active]
     end
   end
 end

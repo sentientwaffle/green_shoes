@@ -20,10 +20,6 @@ class Object
   remove_const :Shoes
 end
 
-def require_relative(f)
-  require File.join(File.dirname(__FILE__), f + '.rb')
-end
-
 require_relative 'shoes/ruby'
 require_relative 'shoes/helper_methods'
 require_relative 'shoes/colors'
@@ -33,3 +29,4 @@ require_relative 'shoes/app'
 require_relative 'shoes/anim'
 require_relative 'shoes/slot'
 require_relative 'shoes/text'
+require_relative 'shoes/mask'
